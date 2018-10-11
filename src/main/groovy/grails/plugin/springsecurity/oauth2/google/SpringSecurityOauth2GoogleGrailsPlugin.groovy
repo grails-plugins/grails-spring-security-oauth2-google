@@ -36,19 +36,6 @@ This plugin provides the capability to authenticate via g+-oauth provider. Depen
     // License: one of 'APACHE', 'GPL2', 'GPL3'
     def license = "APACHE"
 
-    // Details of company behind the plugin (if there is one)
-//    def organization = [ name: "My Company", url: "http://www.my-company.com/" ]
-
-    // Any additional developers beyond the author specified above.
-//    def developers = [ [ name: "Joe Bloggs", email: "joe@bloggs.net" ]]
-
-    // Location of the plugin's issue tracker.
-//    def issueManagement = [ system: "JIRA", url: "http://jira.grails.org/browse/GPMYPLUGIN" ]
-
-    // Online location of the plugin's browseable source code.
-//    def scm = [ url: "http://svn.codehaus.org/grails-plugins/" ]
-    def log
-
     Closure doWithSpring() {
         { ->
             ReflectionUtils.application = grailsApplication
@@ -85,8 +72,9 @@ This plugin provides the capability to authenticate via g+-oauth provider. Depen
     @Override
     void doWithApplicationContext() {
         log.trace("doWithApplicationContext")
-        def SpringSecurityOauth2BaseService oAuth2BaseService = grailsApplication.mainContext.getBean('springSecurityOauth2BaseService') as SpringSecurityOauth2BaseService
-        def GoogleOAuth2Service googleOAuth2Service = grailsApplication.mainContext.getBean('googleOAuth2Service') as GoogleOAuth2Service
+        SpringSecurityOauth2BaseService oAuth2BaseService = grailsApplication.mainContext.getBean('springSecurityOauth2BaseService') as SpringSecurityOauth2BaseService
+        GoogleOAuth2Service googleOAuth2Service = grailsApplication.mainContext.getBean('googleOAuth2Service') as GoogleOAuth2Service
+
         try {
             oAuth2BaseService.registerProvider(googleOAuth2Service)
         } catch (OAuth2Exception exception) {
