@@ -2,6 +2,7 @@ package grails.plugin.springsecurity.oauth2.google
 
 import com.github.scribejava.core.model.OAuth2AccessToken
 import grails.plugin.springsecurity.oauth2.token.OAuth2SpringToken
+import groovy.transform.CompileStatic
 
 /**
  * Always code as if the guy who ends up maintaining your code
@@ -12,29 +13,30 @@ import grails.plugin.springsecurity.oauth2.token.OAuth2SpringToken
  * Created on 18.06.2016
  * @author J. Brunswicker
  */
-class GoogleOauth2SpringToken  extends OAuth2SpringToken{
+@CompileStatic
+class GoogleOauth2SpringToken extends OAuth2SpringToken {
 
-    private String email
-    private String providerId
+	private String email
+	private String providerId
 
-    GoogleOauth2SpringToken(OAuth2AccessToken accessToken, String email, String providerId) {
-        super(accessToken)
-        this.email = email
-        this.providerId = providerId
-    }
+	GoogleOauth2SpringToken(OAuth2AccessToken accessToken, String email, String providerId) {
+		super(accessToken)
+		this.email = email
+		this.providerId = providerId
+	}
 
-    @Override
-    String getProviderName() {
-        return providerId
-    }
+	@Override
+	String getProviderName() {
+		return providerId
+	}
 
-    @Override
-    String getSocialId() {
-        return email
-    }
+	@Override
+	String getSocialId() {
+		return email
+	}
 
-    @Override
-    String getScreenName() {
-        return email
-    }
+	@Override
+	String getScreenName() {
+		return email
+	}
 }

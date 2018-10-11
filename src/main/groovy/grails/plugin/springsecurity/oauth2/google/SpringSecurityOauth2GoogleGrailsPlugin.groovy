@@ -5,12 +5,14 @@ import grails.plugin.springsecurity.SpringSecurityUtils
 import grails.plugin.springsecurity.oauth2.SpringSecurityOauth2BaseService
 import grails.plugin.springsecurity.oauth2.exception.OAuth2Exception
 import grails.plugins.Plugin
+import groovy.util.logging.Slf4j
 import org.slf4j.LoggerFactory
 
+@Slf4j
 class SpringSecurityOauth2GoogleGrailsPlugin extends Plugin {
 
     // the version or versions of Grails the plugin is designed for
-    def grailsVersion = "3.1.8 > *"
+    def grailsVersion = "3.3.8 > *"
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
             "grails-app/views/error.gsp"
