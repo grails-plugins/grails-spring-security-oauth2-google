@@ -5,8 +5,10 @@ import grails.plugin.springsecurity.SpringSecurityUtils
 import grails.plugin.springsecurity.oauth2.SpringSecurityOauth2BaseService
 import grails.plugin.springsecurity.oauth2.exception.OAuth2Exception
 import grails.plugins.Plugin
+import groovy.util.logging.Slf4j
 import org.slf4j.LoggerFactory
 
+@Slf4j
 class SpringSecurityOauth2GoogleGrailsPlugin extends Plugin {
 
     // the version or versions of Grails the plugin is designed for
@@ -45,7 +47,6 @@ This plugin provides the capability to authenticate via g+-oauth provider. Depen
 
     // Online location of the plugin's browseable source code.
 //    def scm = [ url: "http://svn.codehaus.org/grails-plugins/" ]
-    def log
 
     Closure doWithSpring() {
         { ->
@@ -67,7 +68,7 @@ This plugin provides the capability to authenticate via g+-oauth provider. Depen
             }
 
             if (!hasProperty('log')) {
-                log = LoggerFactory.getLogger(SpringSecurityOauth2GoogleGrailsPlugin)
+                this.metaClass.log = LoggerFactory.getLogger(SpringSecurityOauth2GoogleGrailsPlugin)
             }
 
             if (printStatusMessages) {
@@ -83,8 +84,8 @@ This plugin provides the capability to authenticate via g+-oauth provider. Depen
     @Override
     void doWithApplicationContext() {
         log.trace("doWithApplicationContext")
-        def SpringSecurityOauth2BaseService oAuth2BaseService = grailsApplication.mainContext.getBean('springSecurityOauth2BaseService') as SpringSecurityOauth2BaseService
-        def GoogleOAuth2Service googleOAuth2Service = grailsApplication.mainContext.getBean('googleOAuth2Service') as GoogleOAuth2Service
+        SpringSecurityOauth2BaseService oAuth2BaseService = grailsApplication.mainContext.getBean('springSecurityOauth2BaseService') as SpringSecurityOauth2BaseService
+        GoogleOAuth2Service googleOAuth2Service = grailsApplication.mainContext.getBean('googleOAuth2Service') as GoogleOAuth2Service
         try {
             oAuth2BaseService.registerProvider(googleOAuth2Service)
         } catch (OAuth2Exception exception) {

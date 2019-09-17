@@ -11,7 +11,7 @@ gradle-app.setting
 
 # Cache of project
 .gradletasknamecache
-gradle.properties
+# gradle.properties
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
 ### Grails template
