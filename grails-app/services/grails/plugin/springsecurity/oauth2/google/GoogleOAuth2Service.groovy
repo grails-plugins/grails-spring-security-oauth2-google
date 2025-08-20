@@ -1,9 +1,7 @@
 package grails.plugin.springsecurity.oauth2.google
 
-import com.github.scribejava.apis.GoogleApi20
 import com.github.scribejava.core.builder.api.DefaultApi20
 import com.github.scribejava.core.model.OAuth2AccessToken
-import grails.converters.JSON
 import grails.plugin.springsecurity.oauth2.exception.OAuth2Exception
 import grails.plugin.springsecurity.oauth2.service.OAuth2AbstractProviderService
 import grails.plugin.springsecurity.oauth2.token.OAuth2SpringToken
