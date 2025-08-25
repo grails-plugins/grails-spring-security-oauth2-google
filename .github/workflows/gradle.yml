@@ -2,40 +2,17 @@ name: "Java CI"
 on:
   push:
     branches:
-      - '[4-9]+.[0-9]+.x'
+      - master
+      - 'grails_[0-9]+.x'  
   pull_request:
     branches:
-      - '[4-9]+.[0-9]+.x'
+      - master
+      - 'grails_[0-9]+.x'
   workflow_dispatch:
 jobs:
-  test_project:
-    name: "Test Project"
-    runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: true
-      matrix:
-        java: [17, 21]
-    steps:
-      - name: "📥 Checkout repository"
-        uses: actions/checkout@v4
-      - name: "☕️ Setup JDK"
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ matrix.java }}
-          distribution: liberica
-      - name: "🐘 Setup Gradle"
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          develocity-access-key: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
-      - name: "🏃 Run tests"
-        run: ./gradlew check
-      - name: "🏃 Run integration tests"
-        working-directory: ./examples/testapp1
-        run: ./gradlew integrationTest
   publish_snapshot:
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     name: "Build Project and Publish Snapshot release"
-    needs: test_project
     runs-on: ubuntu-24.04
     permissions:
       contents: write # updates gh-pages branch

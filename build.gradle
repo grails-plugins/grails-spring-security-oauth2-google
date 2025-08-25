@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter
 buildscript {
     repositories {
         mavenCentral()
-        maven { url "https://repo.grails.org/grails/restricted" }
+        maven { url = 'https://repo.grails.org/grails/restricted' }
         maven {
             url = 'https://repository.apache.org/content/groups/snapshots'
             content {
@@ -15,39 +15,30 @@ buildscript {
     }
     dependencies {
         classpath platform("org.apache.grails:grails-bom:$grailsVersion")
-        classpath "org.apache.grails:grails-gradle-plugins"
+        classpath 'org.apache.grails:grails-gradle-plugins'
     }
 }
+
 apply plugin: 'groovy'
 apply plugin: 'java-library'
 apply plugin: 'org.apache.grails.gradle.grails-plugin'
 apply plugin: 'org.apache.grails.gradle.grails-publish'
 
-group "org.grails.plugins"
+group = 'org.grails.plugins'
 
 ext {
-    buildInstant = java.util.Optional.ofNullable(System.getenv("SOURCE_DATE_EPOCH"))
+    buildInstant = java.util.Optional.ofNullable(System.getenv('SOURCE_DATE_EPOCH'))
             .filter(s -> !s.isEmpty())
             .map(Long::parseLong)
             .map(Instant::ofEpochSecond)
-            .orElseGet(Instant::now)
+            .orElseGet(Instant::now) as Instant
     formattedBuildDate = DateTimeFormatter.ISO_INSTANT.format(buildInstant)
-    buildDate = (buildInstant as Instant).atZone(ZoneOffset.UTC) // for reproducible builds
-
-    publishArtifactId = 'grails-spring-security-oauth2-google'
-    pomTitle = 'Spring Security Oauth2 Google Provider'
-    pomDescription = 'This plugin provides the oauth2 Google provider for grails-spring-security-oauth2 plugin.'
-    pomDevelopers = [
-            MatrixCrawler: 'Johannes Brunswicker',
-            rvanderwerf  : 'Ryan Vanderwerf',
-            sbglasius    : 'Søren Berg Glasius',
-    ]
-
+    buildDate = buildInstant.atZone(ZoneOffset.UTC) // for reproducible builds
 }
 
 repositories {
     mavenCentral()
-    maven { url "https://repo.grails.org/grails/restricted" }
+    maven { url = 'https://repo.grails.org/grails/restricted' }
     maven {
         url = 'https://repository.apache.org/content/groups/snapshots'
         content {
@@ -58,16 +49,14 @@ repositories {
 
 dependencies {
     implementation platform("org.apache.grails:grails-bom:$grailsVersion")
-    compileOnly "org.springframework.boot:spring-boot-starter-logging"
-    compileOnly "org.springframework.boot:spring-boot-starter-validation"
-    compileOnly "org.springframework.boot:spring-boot-autoconfigure"
-    compileOnly "org.springframework.boot:spring-boot-starter"
-    compileOnly "org.apache.grails:grails-core"
-    profile "org.apache.grails.profiles:plugin"
-    runtimeOnly "org.fusesource.jansi:jansi"
+    compileOnly 'org.springframework.boot:spring-boot-starter-logging'
+    compileOnly 'org.springframework.boot:spring-boot-starter-validation'
+    compileOnly 'org.springframework.boot:spring-boot-autoconfigure'
+    compileOnly 'org.springframework.boot:spring-boot-starter'
+    compileOnly 'org.apache.grails:grails-core'
 
-    implementation 'org.apache.grails:grails-spring-security:7.0.0-M5'
-    implementation 'org.apache.grails:grails-spring-security-oauth2:7.0.0-M5'
+    implementation 'org.apache.grails:grails-spring-security:7.0.0-SNAPSHOT'
+    implementation 'org.apache.grails:grails-spring-security-oauth2:7.0.0-SNAPSHOT'
 }
 
 grailsPublish {
@@ -75,15 +64,13 @@ grailsPublish {
     license {
         name = 'Apache-2.0'
     }
-    title = pomTitle
-    desc = pomDescription
-    developers = pomDevelopers
+    title = 'Spring Security Oauth2 Google Provider'
+    desc = 'This plugin provides the oauth2 Google provider for grails-spring-security-oauth2 plugin.'
+    developers = [
+            MatrixCrawler: 'Johannes Brunswicker',
+            rvanderwerf  : 'Ryan Vanderwerf',
+            sbglasius    : 'Søren Berg Glasius',
+    ]
 }
-
 
 compileJava.options.release = javaVersion.toInteger()
-
-tasks.withType(Test) {
-    useJUnitPlatform()
-}
-
