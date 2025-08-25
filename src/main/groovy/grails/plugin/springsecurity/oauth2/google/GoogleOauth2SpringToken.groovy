@@ -12,7 +12,7 @@ import grails.plugin.springsecurity.oauth2.token.OAuth2SpringToken
  * Created on 18.06.2016
  * @author J. Brunswicker
  */
-class GoogleOauth2SpringToken  extends OAuth2SpringToken{
+class GoogleOauth2SpringToken extends OAuth2SpringToken {
 
     private String email
     private String providerId

@@ -1,11 +1,12 @@
-Spring Security OAuth2 Google Plugin
-====================================
-[ ![Download](https://api.bintray.com/packages/grails/plugins/spring-security-oauth2-google/images/download.svg) ](https://bintray.com/grails/plugins/spring-security-oauth2-google/_latestVersion)
+# Spring Security OAuth2 Google Plugin
+
+[![Java CI](https://github.com/grails-plugins/grails-spring-security-oauth2-google/actions/workflows/gradle.yml/badge.svg)](https://github.com/grails-plugins/grails-spring-security-oauth2-google/actions/workflows/gradle.yml)
+ [![Release](https://github.com/grails-plugins/grails-spring-security-oauth2-google/actions/workflows/release.yml/badge.svg)](https://github.com/grails-plugins/grails-spring-security-oauth2-google/actions/workflows/release.yml)
 
 Add a Google OAuth2 provider to the [Spring Security OAuth2 Plugin](https://github.com/grails-plugins/grails-spring-security-oauth2).
 
-Installation
-------------
+## Installation
+
 Add the following dependencies in `build.gradle`
 ```
 dependencies {
@@ -16,8 +17,8 @@ dependencies {
 }
 ```
 
-Usage
------
+## Usage
+
 Add this to your application.yml
 ```
 grails:
@@ -43,6 +44,18 @@ Logged with google?
 <oauth2:ifLoggedInWith provider="google">yes</oauth2:ifLoggedInWith>
 <oauth2:ifNotLoggedInWith provider="google">no</oauth2:ifNotLoggedInWith>
 ```
-License
--------
+
+## Versions
+
+| Branch | Grails Version |
+|--------|----------------|
+| 1.x    | 3+             |
+| 2.x    | 7.0.0          |
+
+
+### Note: 
+No working version for Grails 6.x at the moment (see https://github.com/grails-plugins/grails-spring-security-oauth2-google/issues/4)
+
+## License
+
 Apache 2

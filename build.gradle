@@ -1,88 +1,76 @@
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+
 buildscript {
-    ext {
-        grailsVersion = project.grailsVersion
-    }
     repositories {
-        mavenLocal()
-        maven { url "https://repo.grails.org/grails/core" }
+        mavenCentral()
+        maven { url = 'https://repo.grails.org/grails/restricted' }
+        maven {
+            url = 'https://repository.apache.org/content/groups/snapshots'
+            content {
+                includeVersionByRegex('org[.]apache[.](grails|groovy).*', '.*', '.*-SNAPSHOT')
+            }
+        }
     }
     dependencies {
-        classpath "org.grails:grails-gradle-plugin:$grailsVersion"
-        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.15.1"
+        classpath platform("org.apache.grails:grails-bom:$grailsVersion")
+        classpath 'org.apache.grails:grails-gradle-plugins'
     }
 }
 
-def setIfNotSet = { String name, value ->
-    if (!project.ext.has(name)) {
-        project.ext[name] = value
-    }
-}
-setIfNotSet 'issueTrackerUrl', project.vcsUrl + '/issues'
-setIfNotSet 'websiteUrl', project.vcsUrl
+apply plugin: 'groovy'
+apply plugin: 'java-library'
+apply plugin: 'org.apache.grails.gradle.grails-plugin'
+apply plugin: 'org.apache.grails.gradle.grails-publish'
 
-version "1.2.1.BUILD-SNAPSHOT"
 group = 'org.grails.plugins'
 
-apply plugin:"eclipse"
-apply plugin: "idea"
-apply plugin: "org.grails.grails-plugin"
-apply plugin: "org.grails.grails-plugin-publish"
-apply plugin: "org.grails.grails-gsp"
-apply plugin: "asset-pipeline"
-
 ext {
-    grailsVersion = project.grailsVersion
-    gradleWrapperVersion = project.gradleWrapperVersion
+    buildInstant = java.util.Optional.ofNullable(System.getenv('SOURCE_DATE_EPOCH'))
+            .filter(s -> !s.isEmpty())
+            .map(Long::parseLong)
+            .map(Instant::ofEpochSecond)
+            .orElseGet(Instant::now) as Instant
+    formattedBuildDate = DateTimeFormatter.ISO_INSTANT.format(buildInstant)
+    buildDate = buildInstant.atZone(ZoneOffset.UTC) // for reproducible builds
 }
 
 repositories {
-    mavenLocal()
-    maven { url "https://repo.grails.org/grails/core" }
-}
-
-dependencyManagement {
-    imports {
-        mavenBom "org.grails:grails-bom:$grailsVersion"
+    mavenCentral()
+    maven { url = 'https://repo.grails.org/grails/restricted' }
+    maven {
+        url = 'https://repository.apache.org/content/groups/snapshots'
+        content {
+            includeVersionByRegex('org[.]apache[.](grails|groovy).*', '.*', '.*-SNAPSHOT')
+        }
     }
-    applyMavenExclusions false
 }
 
 dependencies {
-    console "org.grails:grails-console"
+    implementation platform("org.apache.grails:grails-bom:$grailsVersion")
+    compileOnly 'org.springframework.boot:spring-boot-starter-logging'
+    compileOnly 'org.springframework.boot:spring-boot-starter-validation'
+    compileOnly 'org.springframework.boot:spring-boot-autoconfigure'
+    compileOnly 'org.springframework.boot:spring-boot-starter'
+    compileOnly 'org.apache.grails:grails-core'
 
-    profile "org.grails.profiles:web-plugin"
-
-    provided 'javax.servlet:javax.servlet-api:3.1.0'
-    provided 'org.grails:grails-dependencies'
-    provided 'org.grails.plugins:spring-security-core:3.2.+'
-    provided 'org.grails.plugins:spring-security-oauth2:1.2.0'
-    provided "org.grails:grails-plugin-services"
-
-    runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.15.1"
-
-    testCompile "cglib:cglib-nodep:2.2.2"
-    testCompile "org.grails:grails-plugin-testing"
-    testCompile "org.grails:grails-web-testing-support"
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = gradleWrapperVersion
+    implementation 'org.apache.grails:grails-spring-security:7.0.0-SNAPSHOT'
+    implementation 'org.apache.grails:grails-spring-security-oauth2:7.0.0-SNAPSHOT'
 }
 
 grailsPublish {
-    user = System.getProperty("BINTRAY_USER")
-    key = System.getProperty("BINTRAY_KEY")
     githubSlug = 'grails-plugins/grails-spring-security-oauth2-google'
     license {
         name = 'Apache-2.0'
     }
-    title = "Spring Security Oauth2 Google Provider"
-    desc = "This plugin provides the capability to authenticate via g+-oauth provider. Depends on grails-spring-security-oauth2. v1.2.0 starts after fork to grails-plugins org. Includes unreleased 1.1.1 from other repo."
-    developers = [MatrixCrawler: "Johannes Brunswicker",
-                  rvanderwerf   : "Ryan Vanderwerf"]
-    userOrg = 'grails'
+    title = 'Spring Security Oauth2 Google Provider'
+    desc = 'This plugin provides the oauth2 Google provider for grails-spring-security-oauth2 plugin.'
+    developers = [
+            MatrixCrawler: 'Johannes Brunswicker',
+            rvanderwerf  : 'Ryan Vanderwerf',
+            sbglasius    : 'Søren Berg Glasius',
+    ]
 }
 
-assets {
-    packagePlugin = true
-}
+compileJava.options.release = javaVersion.toInteger()
